@@ -35,15 +35,18 @@ public class PlayerController : MonoBehaviour
 
 
     [Header("Shooting")]
-    public float FireRate = 0.2f;
+    public float FireRate = 0.2f; //0.2
     public LayerMask ShootMask;
     float NextShoot = 0;
+    public float shootDistance = 1000;
+    public int damage = 5;
 
     [Header("Effect")]
     public GameObject hitEffect;
     public GameObject muzzleFlash;
+    public GameObject bulletEffect;
     public Transform muzzle;
-    
+
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -86,6 +89,9 @@ public class PlayerController : MonoBehaviour
             ySpeed = JumpImpulse;
         }
         else if(ySpeed > Gravity)
+        {
+            ySpeed += Gravity * Time.deltaTime;
+        }
         movement.y = ySpeed;
         characterController.Move(movement*Time.deltaTime);
     }
@@ -114,14 +120,22 @@ public class PlayerController : MonoBehaviour
             ShootMask);
 
         Instantiate(muzzleFlash, muzzle);
+        
+        GameObject newBullet = Instantiate(bulletEffect, muzzle.position, Quaternion.identity);
 
         if (didhit)
         {
+            characterHealth targetHealth = hit.collider.GetComponent<characterHealth>();
+            if (targetHealth != null)
+                targetHealth.takeDamage(damage);
             print($"shot {hit.collider.gameObject.name} at {hit.point}");
+            newBullet.GetComponent<BullletMover>().Initialise(hit.point);
             Instantiate(hitEffect, hit.point, Quaternion.identity);
         }
         else
         {
+            Vector3 lineEnd = lookCamera.position + (lookCamera.forward * shootDistance);
+            newBullet.GetComponent<BullletMover>().Initialise(lineEnd);
             print("missed");
         }
     }
