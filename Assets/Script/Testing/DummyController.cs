@@ -1,8 +1,11 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Assemblies;
 
 public class DummyController : MonoBehaviour, IHealthUpdateReceiver
 {
+
+    
     void IHealthUpdateReceiver.Damage(int currentHealth, int maxhealth)
     {
         print($"ow  { currentHealth}");
@@ -17,6 +20,7 @@ public class DummyController : MonoBehaviour, IHealthUpdateReceiver
     {
         Destroy(gameObject);
         
-        
+
+
     }
 }

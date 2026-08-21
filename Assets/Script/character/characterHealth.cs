@@ -8,6 +8,7 @@ public class characterHealth : MonoBehaviour
     public int currentHealth = 100;
 
 
+
     List<IHealthUpdateReceiver> updateReceivers = new List<IHealthUpdateReceiver>();
 
     private void Start()
@@ -20,7 +21,7 @@ public class characterHealth : MonoBehaviour
         currentHealth -= damage;
         if (currentHealth <= 0)
         {
-            currentHealth = 0;
+            currentHealth = 100; //0
             print($"{gameObject.name} was killed");
         }
         else

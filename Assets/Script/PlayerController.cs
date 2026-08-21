@@ -1,6 +1,7 @@
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 
 public class PlayerController : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class PlayerController : MonoBehaviour
     public float sensitivityY = 20;
     public float maxYrotation = 90;
     public float minYrotation = -90;
-    private float currentYrotation; 
+    private float currentYrotation;
 
     [Header("Inputs")]
     public InputActionAsset inputManager;
@@ -29,23 +30,32 @@ public class PlayerController : MonoBehaviour
     public float MoveSpeed = 5;
     public float JumpImpulse = 5;
     public float Gravity = -20;
-    
-   CharacterController characterController;
+
+    CharacterController characterController;
     float ySpeed = 0;
 
 
     [Header("Shooting")]
     public float FireRate = 0.2f; //0.2
     public LayerMask ShootMask;
-    float NextShoot = 0;
     public float shootDistance = 1000;
     public int damage = 5;
+    public int maxAmmo = 6;
+    public int currentAmmo = 6;
+
+    //public Key rekey = Key.R;
+
+    float NextShoot = 0;
 
     [Header("Effect")]
     public GameObject hitEffect;
     public GameObject muzzleFlash;
     public GameObject bulletEffect;
     public Transform muzzle;
+
+    [Header("GUI")]
+    public AmmoTextControl ammoGUI;
+    
 
 
 
@@ -54,19 +64,22 @@ public class PlayerController : MonoBehaviour
     {
         inputManager.FindActionMap("Player").Enable();
         characterController = gameObject.GetComponent<CharacterController>();
+        UpdateAmmo(0);
     }
 
     // Update is called once per frame
     void Update()
     {
+        
         GetInput();
         Rotate();
         Move();
-        if(shoot == true)
+        if (shoot == true)
         {
             Shoot();
         }
-        
+
+
     }
 
     void GetInput()
@@ -81,37 +94,43 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 movement = transform.TransformDirection(move);
         movement = movement * MoveSpeed;
-        
 
-        
+
+
         if (Jump == true && characterController.isGrounded)
         {
             ySpeed = JumpImpulse;
         }
-        else if(ySpeed > Gravity)
+        else if (ySpeed > Gravity)
         {
             ySpeed += Gravity * Time.deltaTime;
         }
         movement.y = ySpeed;
-        characterController.Move(movement*Time.deltaTime);
+        characterController.Move(movement * Time.deltaTime);
     }
     void Rotate()
     {
         transform.Rotate(transform.up, look.x * sensitivityX * Time.deltaTime);
 
         currentYrotation += look.y * sensitivityY * Time.deltaTime;
-        currentYrotation = Mathf.Clamp(currentYrotation,minYrotation,maxYrotation);
+        currentYrotation = Mathf.Clamp(currentYrotation, minYrotation, maxYrotation);
 
-        lookCamera.eulerAngles = 
-            new Vector3(-currentYrotation, 
-            lookCamera.eulerAngles.y, 
+        lookCamera.eulerAngles =
+            new Vector3(-currentYrotation,
+            lookCamera.eulerAngles.y,
             lookCamera.eulerAngles.z);
-        
-    
+
+
     }
 
     void Shoot()
     {
+        if (currentAmmo <= 0)
+        {
+            return;
+        }
+        UpdateAmmo(-1);
+
         RaycastHit hit;
         bool didhit = Physics.Raycast(lookCamera.position,
             lookCamera.forward,
@@ -120,7 +139,7 @@ public class PlayerController : MonoBehaviour
             ShootMask);
 
         Instantiate(muzzleFlash, muzzle);
-        
+
         GameObject newBullet = Instantiate(bulletEffect, muzzle.position, Quaternion.identity);
 
         if (didhit)
@@ -128,7 +147,7 @@ public class PlayerController : MonoBehaviour
             characterHealth targetHealth = hit.collider.GetComponent<characterHealth>();
             if (targetHealth != null)
                 targetHealth.takeDamage(damage);
-            print($"shot {hit.collider.gameObject.name} at {hit.point}");
+            //print($"shot {hit.collider.gameObject.name} at {hit.point}");
             newBullet.GetComponent<BullletMover>().Initialise(hit.point);
             Instantiate(hitEffect, hit.point, Quaternion.identity);
         }
@@ -139,4 +158,41 @@ public class PlayerController : MonoBehaviour
             print("missed");
         }
     }
+
+    void UpdateAmmo(int value) 
+    {
+        currentAmmo += value;
+        currentAmmo = Mathf.Clamp(currentAmmo, 0, maxAmmo);
+        ammoGUI.UpdateText("Rifle", currentAmmo, maxAmmo);
+    }
+        
+
+    public bool ReceivePickup(Pickup pickup)
+    {
+        if (pickup is AmmoPickup)
+        {
+            return PickupAmmo(pickup);
+        }
+        return false;
+
+
+
+    }
+    bool PickupAmmo(Pickup Ammo)
+    {
+        if(currentAmmo < maxAmmo)
+        {
+            UpdateAmmo((int)Ammo.value);
+
+            return true;
+        }
+        else
+        {
+            return false;
+
+        }
+
+
+    }
+
 }
