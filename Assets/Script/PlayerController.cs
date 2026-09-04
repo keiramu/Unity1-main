@@ -2,6 +2,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -55,6 +56,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("GUI")]
     public AmmoTextControl ammoGUI;
+    public AmmoBLTgui ammofill;
     
 
 
@@ -65,6 +67,10 @@ public class PlayerController : MonoBehaviour
         inputManager.FindActionMap("Player").Enable();
         characterController = gameObject.GetComponent<CharacterController>();
         UpdateAmmo(0);
+
+        
+
+        
     }
 
     // Update is called once per frame
@@ -87,8 +93,8 @@ public class PlayerController : MonoBehaviour
         move = MoveAction.action.ReadValue<Vector3>();
         look = LookAction.action.ReadValue<Vector2>();
 
-        shoot = ShootAction.action.WasCompletedThisFrame();
-        Jump = JumpAction.action.WasCompletedThisFrame();
+        shoot = ShootAction.action.WasPressedThisFrame();
+        Jump = JumpAction.action.WasPressedThisFrame();
     }
     void Move()
     {
@@ -130,6 +136,9 @@ public class PlayerController : MonoBehaviour
             return;
         }
         UpdateAmmo(-1);
+        UpdateAmmoGUI();
+
+
 
         RaycastHit hit;
         bool didhit = Physics.Raycast(lookCamera.position,
@@ -164,15 +173,34 @@ public class PlayerController : MonoBehaviour
         currentAmmo += value;
         currentAmmo = Mathf.Clamp(currentAmmo, 0, maxAmmo);
         ammoGUI.UpdateText("Rifle", currentAmmo, maxAmmo);
-    }
-        
 
+    }
+    //wwwwwwwwwww
+    void UpdateAmmoGUI()
+    {
+        if (ammofill != null)
+        {
+            ammofill.UpdateAmmoBar(currentAmmo, maxAmmo);
+        }
+    }
+
+    //wwwwwwwwwwwwwwww
     public bool ReceivePickup(Pickup pickup)
     {
         if (pickup is AmmoPickup)
         {
             return PickupAmmo(pickup);
         }
+        else if (pickup is HealthPickup)
+        {
+            characterHealth health = GetComponent<characterHealth>();
+            if (health != null)
+            {
+                return health.Heal((int)pickup.value);
+            }
+        
+        }
+
         return false;
 
 
@@ -183,15 +211,19 @@ public class PlayerController : MonoBehaviour
         if(currentAmmo < maxAmmo)
         {
             UpdateAmmo((int)Ammo.value);
+            UpdateAmmoGUI();
 
             return true;
         }
         else
         {
             return false;
-
+            
         }
 
+
+
+       
 
     }
 
