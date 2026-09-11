@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -57,6 +58,8 @@ public class PlayerController : MonoBehaviour
     [Header("GUI")]
     public AmmoTextControl ammoGUI;
     public AmmoBLTgui ammofill;
+    [UnitHeaderInspectable("TESTING")]
+    public float notinairfloatt = 0.9f;
     
 
 
@@ -100,6 +103,13 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 movement = transform.TransformDirection(move);
         movement = movement * MoveSpeed;
+        //ww
+        if (!characterController.isGrounded)
+        {
+            movement = movement * MoveSpeed * notinairfloatt;
+        }
+        //ww
+        
 
 
 
@@ -203,7 +213,7 @@ public class PlayerController : MonoBehaviour
 
         return false;
 
-
+        
 
     }
     bool PickupAmmo(Pickup Ammo)
