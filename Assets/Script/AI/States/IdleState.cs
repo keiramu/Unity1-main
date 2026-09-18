@@ -10,13 +10,14 @@ public class IdleState : State
         print("started idlign");
     }
 
-    protected override void CheckTransitions()
+    protected override bool CheckTransitions()
     {
         if(brain.targetVisible && brain.distanceToTarget <= transitionRange)
         {
-            EndState();
             brain.ChangeState(nextState);
-        }    
+            return true;
+        }
+        return base.CheckTransitions();
     }
     public override void EndState()
     {

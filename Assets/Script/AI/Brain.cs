@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEngine.AI;
+
 //manage state transitions and state running << brain 
 
 public class Brain : MonoBehaviour
@@ -20,6 +22,9 @@ public class Brain : MonoBehaviour
     public Transform eyePoint;
     public float eyeRadius = 0.05f;
     public LayerMask sightMask;
+    public float visionAngle = 20;
+
+    public NavMeshAgent agent;
 
     void Start()
     {
@@ -31,6 +36,7 @@ public class Brain : MonoBehaviour
     {
         //find all states in an object
         gameObject.GetComponents(states);
+        agent = GetComponent<NavMeshAgent>();
 
         foreach (State state in states)
         {
@@ -51,14 +57,21 @@ public class Brain : MonoBehaviour
     void Update()
     {
         CheckSensors();
-        currentState.UpdateState();
+        if (!newStateStarted)
+        {
+            newStateStarted = true;
+            currentState.StartState();
+        }
+            currentState.UpdateState();
     }
 
     public void ChangeState(State state)
     {
         currentState = state;
-        state.StartState();
+        newStateStarted = false;
     }
+
+
     void CheckSensors()
     {
         GetVectorAndDistanceToTarget();
@@ -75,12 +88,20 @@ public class Brain : MonoBehaviour
     void CheckTargetVisible()
     {
         RaycastHit hit;
+
+        Vector3 sightVector = (target.transform.position - eyePoint.position).normalized;
+
         bool didhit = Physics.SphereCast(eyePoint.position,
             eyeRadius,
-            (target.transform.position - eyePoint.position).normalized,
+            sightVector,
             out hit,
             distanceToTarget + 1,
             sightMask);
-        targetVisible = (didhit = true && hit.collider.gameObject == target);
+        float angle = Vector3.Angle(eyePoint.forward, sightVector);
+
+        
+        targetVisible = (didhit = true
+            && angle <= visionAngle
+            && hit.collider.gameObject == target);
     }
 }
