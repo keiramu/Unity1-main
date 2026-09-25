@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour
     CharacterController characterController;
     float ySpeed = 0;
 
+    CharacterShooting shooting;
 
     [Header("Shooting")]
     public float FireRate = 0.2f; //0.2
@@ -69,7 +70,8 @@ public class PlayerController : MonoBehaviour
     {
         inputManager.FindActionMap("Player").Enable();
         characterController = gameObject.GetComponent<CharacterController>();
-        UpdateAmmo(0);
+        shooting = gameObject.GetComponent<CharacterShooting>();
+        //UpdateAmmo(0);
 
         
 
@@ -85,7 +87,8 @@ public class PlayerController : MonoBehaviour
         Move();
         if (shoot == true)
         {
-            Shoot();
+            //Shoot();
+            shooting.Shoot();
         }
 
 
@@ -139,67 +142,71 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    void Shoot()
-    {
-        if (currentAmmo <= 0)
-        {
-            return;
-        }
-        UpdateAmmo(-1);
-        UpdateAmmoGUI();
+    //void Shoot()
+    //{
+    //    if (currentAmmo <= 0)
+    //    {
+    //        return;
+    //    }
+    //    //UpdateAmmo(-1);
+    //    //UpdateAmmoGUI();
 
 
 
-        RaycastHit hit;
-        bool didhit = Physics.Raycast(lookCamera.position,
-            lookCamera.forward,
-            out hit,
-            1000,
-            ShootMask);
+    //    RaycastHit hit;
+    //    bool didhit = Physics.Raycast(lookCamera.position,
+    //        lookCamera.forward,
+    //        out hit,
+    //        1000,
+    //        ShootMask);
 
-        Instantiate(muzzleFlash, muzzle);
+    //    Instantiate(muzzleFlash, muzzle);
 
-        GameObject newBullet = Instantiate(bulletEffect, muzzle.position, Quaternion.identity);
+    //    GameObject newBullet = Instantiate(bulletEffect, muzzle.position, Quaternion.identity);
 
-        if (didhit)
-        {
-            characterHealth targetHealth = hit.collider.GetComponent<characterHealth>();
-            if (targetHealth != null)
-                targetHealth.takeDamage(damage);
-            //print($"shot {hit.collider.gameObject.name} at {hit.point}");
-            newBullet.GetComponent<BullletMover>().Initialise(hit.point);
-            Instantiate(hitEffect, hit.point, Quaternion.identity);
-        }
-        else
-        {
-            Vector3 lineEnd = lookCamera.position + (lookCamera.forward * shootDistance);
-            newBullet.GetComponent<BullletMover>().Initialise(lineEnd);
-            print("missed");
-        }
-    }
+    //    if (didhit)
+    //    {
+    //        characterHealth targetHealth = hit.collider.GetComponent<characterHealth>();
+    //        if (targetHealth != null)
+    //            targetHealth.takeDamage(damage);
+    //        //print($"shot {hit.collider.gameObject.name} at {hit.point}");
+    //        newBullet.GetComponent<BullletMover>().Initialise(hit.point);
+    //        Instantiate(hitEffect, hit.point, Quaternion.identity);
+    //    }
+    //    else
+    //    {
+    //        Vector3 lineEnd = lookCamera.position + (lookCamera.forward * shootDistance);
+    //        newBullet.GetComponent<BullletMover>().Initialise(lineEnd);
+    //        print("missed");
+    //    }
+    //}
 
-    void UpdateAmmo(int value) 
-    {
-        currentAmmo += value;
-        currentAmmo = Mathf.Clamp(currentAmmo, 0, maxAmmo);
-        ammoGUI.UpdateText("Rifle", currentAmmo, maxAmmo);
+    //void UpdateAmmo(int value) 
+    //{
+    //    currentAmmo += value;
+    //    currentAmmo = Mathf.Clamp(currentAmmo, 0, maxAmmo);
+    //    ammoGUI.UpdateText("Rifle", currentAmmo, maxAmmo);
 
-    }
-    //wwwwwwwwwww
-    void UpdateAmmoGUI()
-    {
-        if (ammofill != null)
-        {
-            ammofill.UpdateAmmoBar(currentAmmo, maxAmmo);
-        }
-    }
+    //}
+    ////wwwwwwwwwww
+    //void UpdateAmmoGUI()
+    //{
+    //    if (ammofill != null)
+    //    {
+    //        ammofill.UpdateAmmoBar(currentAmmo, maxAmmo);
+    //    }
+    //}
 
     //wwwwwwwwwwwwwwww
     public bool ReceivePickup(Pickup pickup)
     {
         if (pickup is AmmoPickup)
         {
-            return PickupAmmo(pickup);
+            if(shooting != null)
+            {
+                return shooting.PickupAmmo(pickup);
+            }
+
         }
         else if (pickup is HealthPickup)
         {
@@ -216,25 +223,25 @@ public class PlayerController : MonoBehaviour
         
 
     }
-    bool PickupAmmo(Pickup Ammo)
-    {
-        if(currentAmmo < maxAmmo)
-        {
-            UpdateAmmo((int)Ammo.value);
-            UpdateAmmoGUI();
+    //public bool PickupAmmo(Pickup Ammo)
+    //{
+    //    if(currentAmmo < maxAmmo)
+    //    {
+    //        UpdateAmmo((int)Ammo.value);
+    //        UpdateAmmoGUI();
 
-            return true;
-        }
-        else
-        {
-            return false;
+    //        return true;
+    //    }
+    //    else
+    //    {
+    //        return false;
             
-        }
+    //    }
 
 
 
        
 
-    }
+    //}
 
 }

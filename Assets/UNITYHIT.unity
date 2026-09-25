@@ -228,6 +228,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 899a37a05b0a2f9478dc1d2367603a91, type: 3}
       insertIndex: -1
       addedObject: {fileID: 120104576}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 899a37a05b0a2f9478dc1d2367603a91, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 725813651}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 899a37a05b0a2f9478dc1d2367603a91, type: 3}
       insertIndex: -1
@@ -237,6 +240,9 @@ PrefabInstance:
       addedObject: {fileID: 1173954527}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 899a37a05b0a2f9478dc1d2367603a91, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 1173954538}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 899a37a05b0a2f9478dc1d2367603a91, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 1173954532}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 899a37a05b0a2f9478dc1d2367603a91, type: 3}
       insertIndex: -1
@@ -244,6 +250,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 899a37a05b0a2f9478dc1d2367603a91, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1173954534}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 899a37a05b0a2f9478dc1d2367603a91, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1173954537}
   m_SourcePrefab: {fileID: 100100000, guid: 899a37a05b0a2f9478dc1d2367603a91, type: 3}
 --- !u!1 &120104575
 GameObject:
@@ -2888,6 +2897,7 @@ MonoBehaviour:
     m_Bits: 65
   visionAngle: 20
   agent: {fileID: 491184928}
+  shooting: {fileID: 0}
 --- !u!1 &542238686
 GameObject:
   m_ObjectHideFlags: 0
@@ -3394,6 +3404,7 @@ MonoBehaviour:
     m_Bits: 65
   visionAngle: 20
   agent: {fileID: 0}
+  shooting: {fileID: 0}
 --- !u!114 &689843911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3422,6 +3433,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SurpriseState
   hasStarted: 0
+--- !u!1 &725813650
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 725813651}
+  m_Layer: 16
+  m_Name: EnemyEyeModel
+  m_TagString: Untagged
+  m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &725813651
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 725813650}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.01156, y: 0.00119, z: -0.0003}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1173954531}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &770950799
 GameObject:
   m_ObjectHideFlags: 0
@@ -9729,6 +9771,7 @@ GameObject:
   - component: {fileID: 1102845165}
   - component: {fileID: 1102845171}
   - component: {fileID: 1102845172}
+  - component: {fileID: 1102845173}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -9933,6 +9976,35 @@ MonoBehaviour:
   maxHealth: 100
   currentHealth: 2
   healthBar: {fileID: 1970414921}
+--- !u!114 &1102845173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1102845164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25ceeb00ac183f6438527122de1313ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterShooting
+  sightOrigin: {fileID: 330585546}
+  FireRate: 0.2
+  ShootMask:
+    serializedVersion: 2
+    m_Bits: 65537
+  shootDistance: 1000
+  damage: 5
+  useAmmo: 1
+  maxAmmo: 6
+  currentAmmo: 6
+  hitEffect: {fileID: 8035539866800134134, guid: 53e14d1fc634a8b41b1952e4608f9691, type: 3}
+  muzzleFlash: {fileID: 7096972413818869955, guid: ba7d4046256138c40a730c36a301036b, type: 3}
+  bulletEffect: {fileID: 6561449421255507730, guid: b408f1105b755194990aad745e70fc04, type: 3}
+  muzzle: {fileID: 973292858}
+  ammoGUI: {fileID: 122576169}
+  ammofill: {fileID: 1316235744}
+  notinairfloatt: 0.9
 --- !u!1 &1124545137
 GameObject:
   m_ObjectHideFlags: 0
@@ -10099,6 +10171,7 @@ MonoBehaviour:
     m_Bits: 65
   visionAngle: 20
   agent: {fileID: 1173954528}
+  shooting: {fileID: 0}
 --- !u!195 &1173954528
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -10176,6 +10249,55 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   hasStarted: 0
   updateFrequency: 0.4
+  shootState: {fileID: 0}
+  shootDistance: 10
+--- !u!114 &1173954537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1173954526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97a71c4beb7509342925ab099959d0e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShootState
+  hasStarted: 0
+  minimumShotCount: 1
+  shotTimer: 0.5
+  trackingSpeed: 120
+  chaseState: {fileID: 1173954534}
+  chaseDistance: 20
+--- !u!114 &1173954538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1173954526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25ceeb00ac183f6438527122de1313ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterShooting
+  sightOrigin: {fileID: 725813651}
+  FireRate: 0.2
+  ShootMask:
+    serializedVersion: 2
+    m_Bits: 65
+  shootDistance: 1000
+  damage: 5
+  useAmmo: 0
+  maxAmmo: 6
+  currentAmmo: 6
+  hitEffect: {fileID: 8035539866800134134, guid: 53e14d1fc634a8b41b1952e4608f9691, type: 3}
+  muzzleFlash: {fileID: 7096972413818869955, guid: ba7d4046256138c40a730c36a301036b, type: 3}
+  bulletEffect: {fileID: 6561449421255507730, guid: b408f1105b755194990aad745e70fc04, type: 3}
+  muzzle: {fileID: 725813651}
+  ammoGUI: {fileID: 0}
+  ammofill: {fileID: 0}
+  notinairfloatt: 0.9
 --- !u!1 &1305622144
 GameObject:
   m_ObjectHideFlags: 0
@@ -12218,6 +12340,10 @@ PrefabInstance:
     - target: {fileID: 6561449421255507730, guid: b408f1105b755194990aad745e70fc04, type: 3}
       propertyPath: m_Name
       value: Bullet
+      objectReference: {fileID: 0}
+    - target: {fileID: 6561449421255507730, guid: b408f1105b755194990aad745e70fc04, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

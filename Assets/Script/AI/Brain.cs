@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 //manage state transitions and state running << brain 
 
-public class Brain : MonoBehaviour
+public class Brain : MonoBehaviour, IHealthUpdateReceiver
 {
     [Header("state management")]
     public State startState;
@@ -25,6 +25,13 @@ public class Brain : MonoBehaviour
     public float visionAngle = 20;
 
     public NavMeshAgent agent;
+    public CharacterShooting shooting;
+
+    [Header("Event States")]
+    public State hurtState;
+    public State deathState;
+
+
 
     void Start()
     {
@@ -37,7 +44,7 @@ public class Brain : MonoBehaviour
         //find all states in an object
         gameObject.GetComponents(states);
         agent = GetComponent<NavMeshAgent>();
-
+        shooting = GetComponent<CharacterShooting>();
         foreach (State state in states)
         {
             state.ReceiveBrain(this);       
@@ -103,5 +110,24 @@ public class Brain : MonoBehaviour
         targetVisible = (didhit = true
             && angle <= visionAngle
             && hit.collider.gameObject == target);
+    }
+
+    void IHealthUpdateReceiver.Damage(int currentHealth, int maxhealth)
+    {
+        currentState.EndState();
+        ChangeState(hurtState);
+        
+        
+    }
+
+    void IHealthUpdateReceiver.Healed(int currentHealth, int maxhealth)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    void IHealthUpdateReceiver.Killed()
+    {
+        currentState.EndState();
+        ChangeState(deathState);
     }
 }
