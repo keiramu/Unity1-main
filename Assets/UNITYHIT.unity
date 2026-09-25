@@ -253,6 +253,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 899a37a05b0a2f9478dc1d2367603a91, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1173954537}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 899a37a05b0a2f9478dc1d2367603a91, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1173954541}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 899a37a05b0a2f9478dc1d2367603a91, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1173954540}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 899a37a05b0a2f9478dc1d2367603a91, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1173954539}
   m_SourcePrefab: {fileID: 100100000, guid: 899a37a05b0a2f9478dc1d2367603a91, type: 3}
 --- !u!1 &120104575
 GameObject:
@@ -2880,7 +2889,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 491184924}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0e4983ed45b523149ba37305911f7add, type: 3}
   m_Name: 
@@ -2898,6 +2907,8 @@ MonoBehaviour:
   visionAngle: 20
   agent: {fileID: 491184928}
   shooting: {fileID: 0}
+  hurtState: {fileID: 0}
+  deathState: {fileID: 0}
 --- !u!1 &542238686
 GameObject:
   m_ObjectHideFlags: 0
@@ -3405,6 +3416,8 @@ MonoBehaviour:
   visionAngle: 20
   agent: {fileID: 0}
   shooting: {fileID: 0}
+  hurtState: {fileID: 0}
+  deathState: {fileID: 0}
 --- !u!114 &689843911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10171,7 +10184,9 @@ MonoBehaviour:
     m_Bits: 65
   visionAngle: 20
   agent: {fileID: 1173954528}
-  shooting: {fileID: 0}
+  shooting: {fileID: 1173954538}
+  hurtState: {fileID: 1173954541}
+  deathState: {fileID: 1173954540}
 --- !u!195 &1173954528
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -10211,7 +10226,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de9a714f71182ca44a7721a4ee900695, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PatrolState
-  hasStarted: 0
+  hasStarted: 1
   patrolPoints:
   - {fileID: 1153858885}
   - {fileID: 1129021394}
@@ -10249,7 +10264,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   hasStarted: 0
   updateFrequency: 0.4
-  shootState: {fileID: 0}
+  shootState: {fileID: 1173954537}
   shootDistance: 10
 --- !u!114 &1173954537
 MonoBehaviour:
@@ -10298,6 +10313,51 @@ MonoBehaviour:
   ammoGUI: {fileID: 0}
   ammofill: {fileID: 0}
   notinairfloatt: 0.9
+--- !u!114 &1173954539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1173954526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 650c5b16ebe9a7d47a32ba441fb62405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::characterHealth
+  maxHealth: 10
+  currentHealth: 10
+  healthBar: {fileID: 0}
+--- !u!114 &1173954540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1173954526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb00a28ac2a31c544bd0f7697b1f6527, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  hasStarted: 0
+--- !u!114 &1173954541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1173954526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c98367ce702b2945a387728f602b975, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  hasStarted: 0
+  recoveryTime: 0.5
+  chaseState: {fileID: 1173954534}
+  shootDistance: 10
+  shootState: {fileID: 1173954537}
 --- !u!1 &1305622144
 GameObject:
   m_ObjectHideFlags: 0
